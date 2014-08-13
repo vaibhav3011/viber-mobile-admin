@@ -2,7 +2,7 @@ angular.module('directory.controllers', [])
 
     .controller('StudentListCtrl', function ($scope, Students) {
 
-        $scope.searchKey = "Ankit Saxena";
+        $scope.searchKey = "";
 
         $scope.clearSearch = function () {
             $scope.searchKey = "";
