@@ -1,5 +1,5 @@
 var express = require('express'),
-    employees = require('./routes/employees'),
+    students = require('./routes/students'),
     app = express();
 
 app.use(express.static('www'));
@@ -11,9 +11,9 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-app.get('/employees', employees.findAll);
-app.get('/employees/:id', employees.findById);
-app.get('/employees/:id/reports', employees.findReports);
+app.get('/students', students.findAll);
+app.get('/students/:id', students.findById);
+app.get('/students/:id/reports', students.findReports);
 
 app.set('port', process.env.PORT || 5000);
 

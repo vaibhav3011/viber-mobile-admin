@@ -1,0 +1,24 @@
+<ion-view title="students">
+
+    <div class="bar bar-subheader item-input-inset">
+        <label class="item-input-wrapper">
+            <i class="icon ion-ios7-search placeholder-icon"></i>
+            <input id="searchKey" type="search" placeholder="Search" ng-model="searchKey" autocorrect="off" >
+            <button class="button button-clear" ng-click="clearSearch()">X</button>
+        </label>
+        <button class="button button-clear" ng-click="search()">Search</button>
+    </div>
+
+    <ion-content class="has-header has-subheader">
+        <ion-list>
+            <ion-item ng-repeat="student in students" type="item-text-wrap" class="item-avatar"
+                      href="#/students/{{student.facebookid}}">
+                <img ng-src="http://graph.facebook.com/{{student.facebookid}}/picture?height=80&width=80"/>
+                {{student.name}} 
+                <p>{{student.email}}
+                <br/>{{student.location.name}}</p>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+
+</ion-view>

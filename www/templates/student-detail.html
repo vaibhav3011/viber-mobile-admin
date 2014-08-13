@@ -1,0 +1,23 @@
+<ion-view title="student">
+
+    <ion-content has-header="true" padding="true">
+
+        <div class="list card">
+            <div class="item item-avatar">
+                <img ng-src="http://graph.facebook.com/{{student.facebookid}}/picture?height=80&width=80"/>
+                <h2>{{student.name}}</h2>
+                <!--<p>{{student.role.name}}</p>-->
+            </div>
+            <a class="item item-icon-left" href="#/students/{{student.managerId}}" ng-if="student.managerId > -1"><i class="icon ion-ios7-person"></i>View Manager<p>{{student.manager.name}}</p></a>
+            <a class="item item-icon-left" href="#/students/{{student.id}}/reports" ng-if="student.reports > 0"><i class="icon ion-person-stalker"></i>View Direct Reports<p>{{student.reports}}</p></a>
+            <a class="item item-icon-left" href="mailto:{{student.email}}"><i class="icon ion-ios7-email"></i>Email<p>{{student.email}}</p></a>
+            <a class="item item-icon-left" href="tel:{{student.officePhone}}"><i class="icon ion-ios7-telephone"></i>Call Office<p>{{student.mobile}}</p></a>
+            <a class="item item-icon-left" href="tel:{{student.cellPhone}}"><i class="icon ion-ios7-telephone"></i>College<p>{{student.college.name}}</p></a>
+            <a class="item item-icon-left" href="sms:{{student.cellPhone}}"><i class="icon ion-chatbox-working"></i>Vibes :<p>{{student.points}}</p></a>
+            <a class="item item-icon-left" ng-repeat="level in student.stages"><i class="icon ion-chatbox-working"></i>{{level.name}} :<p>{{level.completion}}</p></a>
+            
+        </div>
+
+    </ion-content>
+
+</ion-view>

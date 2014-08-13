@@ -1,27 +1,28 @@
 angular.module('directory.controllers', [])
 
-    .controller('EmployeeListCtrl', function ($scope, Employees) {
+    .controller('StudentListCtrl', function ($scope, Students) {
 
-        $scope.searchKey = "";
+        $scope.searchKey = "Ankit Saxena";
 
         $scope.clearSearch = function () {
             $scope.searchKey = "";
-            $scope.employees = Employees.query();
+            $scope.students = Students.query();
         }
 
         $scope.search = function () {
-            $scope.employees = Employees.query({name: $scope.searchKey});
+            $scope.students = Students.query({name: $scope.searchKey});
         }
 
-        $scope.employees = Employees.query();
+        $scope.students = Students.query();
     })
 
-    .controller('EmployeeDetailCtrl', function($scope, $stateParams, Employees) {
+    .controller('StudentDetailCtrl', function($scope, $stateParams, Students) {
         console.log('details');
-        $scope.employee = Employees.get({employeeId: $stateParams.employeeId});
+        $scope.student = Students.get({studentId: $stateParams.StudentId});
+        
     })
 
-    .controller('EmployeeReportsCtrl', function ($scope, $stateParams, Employees) {
+    .controller('StudentReportsCtrl', function ($scope, $stateParams, Students) {
         console.log('reports');
-        $scope.employee = Employees.get({employeeId: $stateParams.employeeId, data: 'reports'});
+        $scope.student = Students.get({StudentId: $stateParams.StudentId, data: 'reports'});
     });

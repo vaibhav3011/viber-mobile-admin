@@ -20,20 +20,20 @@ angular.module('directory', ['ionic', 'directory.controllers', 'directory.servic
 
             .state('search', {
                 url: '/search',
-                templateUrl: 'templates/employee-list.html',
-                controller: 'EmployeeListCtrl'
+                templateUrl: 'templates/student-list.html',
+                controller: 'StudentListCtrl'
             })
 
-            .state('employee', {
-                url: '/employees/:employeeId',
-                templateUrl: 'templates/employee-detail.html',
-                controller: 'EmployeeDetailCtrl'
+            .state('Student', {
+                url: '/students/:StudentId',
+                templateUrl: 'templates/student-detail.html',
+                controller: 'StudentDetailCtrl'
             })
 
             .state('reports', {
-                url: '/employees/:employeeId/reports',
-                templateUrl: 'templates/employee-reports.html',
-                controller: 'EmployeeReportsCtrl'
+                url: '/students/:StudentId/reports',
+                templateUrl: 'templates/student-reports.html',
+                controller: 'StudentReportsCtrl'
             });
 
         $urlRouterProvider.otherwise('/search');
