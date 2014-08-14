@@ -4,14 +4,15 @@
 
         <div class="list card">
             <div class="item item-avatar">
-                <img src="pics/{{employee.pic }}"/>
-                <h2>{{employee.firstName}} {{employee.lastName}}</h2>
-                <p>{{employee.title}}</p>
+                <img  ng-src="http://graph.facebook.com/{{currentstudent.facebookid}}/picture?height=80&width=80"/>
+                <h2>{{currentstudent.name}}</h2>
+                <p>{{currentstudent.rolename}}</p>
             </div>
-            <a ng-repeat="report in employee.reports" class="item item-avatar item-icon-left" href="#/employees/{{report.id}}">
-                <img src="pics/{{report.pic }}"/>
-                {{report.firstName}} {{report.lastName}}
-                <p>{{report.title}}</p>
+            <a ng-repeat="reportee in reportees" class="item item-avatar item-icon-left" href="#/students/{{reportee.email}}">
+                <img  ng-src="http://graph.facebook.com/{{reportee.facebookid}}/picture?height=80&width=80"/>
+                {{reportee.name}}
+                <p ng-if="reportee.reportees">No of Reportees :{{reportee.reportees}}</p>
+                
             </a>
         </div>
 

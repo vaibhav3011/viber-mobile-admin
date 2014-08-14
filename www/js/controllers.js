@@ -48,8 +48,9 @@ angular.module('directory.controllers', [])
         
     })
 
-    .controller('StudentDetailCtrl', function($scope, $stateParams, Students,$ionicLoading) {
+    .controller('StudentDetailCtrl', function($scope, $stateParams, Students,$ionicLoading,$rootScope) {
         console.log('details');
+        
         
             $ionicLoading.show({
               template: 'Loading...'
@@ -57,6 +58,7 @@ angular.module('directory.controllers', [])
         Students.get({studentId: $stateParams.StudentId}).$promise.then(function(data){
             
             $scope.student = data;
+            $rootScope.currentstudent = data;
             
             $ionicLoading.hide();
         
@@ -72,7 +74,25 @@ angular.module('directory.controllers', [])
           };
         })
 
-    .controller('StudentReportsCtrl', function ($scope, $stateParams, Students) {
+    .controller('StudentReportsCtrl', function ($scope, $stateParams, Students, Manage,$ionicLoading) {
         console.log('reports');
-        $scope.student = Students.get({StudentId: $stateParams.StudentId, data: 'reports'});
+         $ionicLoading.show({
+              template: 'Loading...'
+            });
+            
+           
+            
+            
+            
+        Manage.query({email: $stateParams.email, role: $stateParams.role}).$promise.then(function(data){
+            
+            $ionicLoading.hide();
+            $scope.reportees = data;
+            
+        });
+        
+        
+        
+        
+        
     });

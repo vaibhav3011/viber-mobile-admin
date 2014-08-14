@@ -31,7 +31,7 @@ angular.module('directory', ['ionic', 'directory.controllers', 'directory.servic
             })
 
             .state('reports', {
-                url: '/students/:StudentId/reports',
+                url: '/manage/:email/:role',
                 templateUrl: 'templates/student-reports.html',
                 controller: 'StudentReportsCtrl'
             });

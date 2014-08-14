@@ -61,7 +61,8 @@ var studentSchema = new Schema({
         secret : String
     },
     role : Number,
-    manager : { email:String,updatedon:{type: Date, 'default': Date.now},updatedby:String},
+    rolename :String,
+    manager : { name:String,email:String,updatedon:{type: Date, 'default': Date.now},updatedby:String},
     points : Number,
     stages : [{stageid:String,
                 name : String,
@@ -81,7 +82,7 @@ var studentSchema = new Schema({
     refercount :Number,
     referred_by: String,
     vcron :Number,
-        c :String
+    c     :String
 },
     { collection: 'students' })
 

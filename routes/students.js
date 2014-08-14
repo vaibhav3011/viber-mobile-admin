@@ -3,7 +3,9 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://viber_app:akshat@ds053449.mongolab.com:53449/viber_prod');
 var studentSchema = require('../models/studentmodel.js');
 var Students = studentSchema.student;
-console.log(Students);
+
+
+
 
 
 exports.findAll = function (req, res, next) {
@@ -22,7 +24,7 @@ exports.findAll = function (req, res, next) {
         });
     } else {
         
-      var q=  Students.find({}).sort({'updatedon':-1}).limit(50);
+      var q=  Students.find({}).sort({'updatedon':-1}).limit(50).select('facebookid name email location.name rolename role');
       q.exec(function(err,Students){
            
            if(!err)
@@ -46,7 +48,7 @@ exports.findAll = function (req, res, next) {
 exports.findById = function (req, res, next) {
     var id = req.params.id;
     
-     var q=  Students.find({'facebookid': id}).sort({'updatedon':-1}).limit(50);
+     var q=  Students.find({'email': id}).sort({'updatedon':-1}).limit(50);
       q.exec(function(err,Students){
            
            if(!err && Students.length > 0)
