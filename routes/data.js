@@ -4,7 +4,7 @@
 
 //cities=["New Delhi","Mumbai","Hyderabad","Bangalore","Chennai","Pune","Kolkata","Jaipur","Ahmedabad","Noida"]
 var redis =require("redis");
-var client=redis.createClient(6379, '54.251.103.74')
+var client=redis.createClient(6379, '54.251.103.74');
 client.select(2, function() { /* ... */ });
 exports.level_1_100 = function (req, res, next) {
 

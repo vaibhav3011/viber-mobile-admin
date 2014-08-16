@@ -7,7 +7,7 @@ app = express();
 app.use(express.static('www'));
 var manage = require("./routes/manageinterns.js");
 var studentutils = require('./routes/student-utils.js');
-
+var messenger=require('./routes/messenger')
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -21,7 +21,7 @@ app.get('/students/:id/reports', students.findReports);
 app.get('/data',data.level_1_100);
 app.get('/data/:city',data.city)
 app.get('/manage/getsubordinates/:email/:role', manage.getsubordinates);
-
+app.get('/messenger',messenger.people);
 
 // app.get('/manage/child/1',manage.test_addrandomroles);
 // app.get('/manage/grandchild/1',manage.add_grandchild);
