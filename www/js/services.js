@@ -5,4 +5,11 @@ angular.module('directory.services', ['ngResource'])
     })
      .factory('appCache', function ($cacheFactory) {
         return $cacheFactory('appData');
+    })
+    .factory('Manage',function($resource){
+       
+       return $resource('/manage/getsubordinates/:email/:role');
+        
     });
+    
+    
