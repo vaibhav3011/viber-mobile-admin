@@ -1,6 +1,8 @@
-var express = require('express'),
-    students = require('./routes/students'),
-    app = express();
+var express, students, data, app;
+express = require('express');
+students = require('./routes/students');
+data = require('./routes/data');
+app = express();
 
 app.use(express.static('www'));
 
@@ -14,7 +16,8 @@ app.all('*', function(req, res, next) {
 app.get('/students', students.findAll);
 app.get('/students/:id', students.findById);
 app.get('/students/:id/reports', students.findReports);
-
+app.get('/data',data.level_1_100);
+app.get('/data/:city',data.city)
 app.set('port', process.env.PORT || 5000);
 
 app.listen(app.get('port'), function () {
