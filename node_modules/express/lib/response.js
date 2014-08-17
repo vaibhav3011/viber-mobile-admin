@@ -2,23 +2,21 @@
  * Module dependencies.
  */
 
-var escapeHtml = require('escape-html');
-var http = require('http');
-var path = require('path');
-var mixin = require('utils-merge');
-var sign = require('cookie-signature').sign;
-var normalizeType = require('./utils').normalizeType;
-var normalizeTypes = require('./utils').normalizeTypes;
-var setCharset = require('./utils').setCharset;
-var contentDisposition = require('./utils').contentDisposition;
-var deprecate = require('./utils').deprecate;
-var statusCodes = http.STATUS_CODES;
-var cookie = require('cookie');
-var send = require('send');
-var basename = path.basename;
-var extname = path.extname;
-var mime = send.mime;
-var vary = require('vary');
+var http = require('http')
+  , path = require('path')
+  , connect = require('connect')
+  , utils = connect.utils
+  , sign = require('cookie-signature').sign
+  , normalizeType = require('./utils').normalizeType
+  , normalizeTypes = require('./utils').normalizeTypes
+  , etag = require('./utils').etag
+  , statusCodes = http.STATUS_CODES
+  , cookie = require('cookie')
+  , send = require('send')
+  , mime = connect.mime
+  , resolve = require('url').resolve
+  , basename = path.basename
+  , extname = path.extname;
 
 /**
  * Response prototype.
@@ -75,14 +73,15 @@ res.links = function(links){
  *     res.send(404, 'Sorry, cant find that');
  *     res.send(404);
  *
+ * @param {Mixed} body or status
+ * @param {Mixed} body
+ * @return {ServerResponse}
  * @api public
  */
 
 res.send = function(body){
   var req = this.req;
   var head = 'HEAD' == req.method;
-  var type;
-  var encoding;
   var len;
 
   // settings
@@ -108,7 +107,10 @@ res.send = function(body){
       break;
     // string defaulting to html
     case 'string':
-      if (!this.get('Content-Type')) this.type('html');
+      if (!this.get('Content-Type')) {
+        this.charset = this.charset || 'utf-8';
+        this.type('html');
+      }
       break;
     case 'boolean':
     case 'object':
@@ -122,31 +124,18 @@ res.send = function(body){
       break;
   }
 
-  // write strings in utf-8
-  if ('string' === typeof body) {
-    encoding = 'utf8';
-    type = this.get('Content-Type');
-
-    // reflect this in content-type
-    if ('string' === typeof type) {
-      this.set('Content-Type', setCharset(type, 'utf-8'));
-    }
-  }
-
   // populate Content-Length
   if (undefined !== body && !this.get('Content-Length')) {
-    len = Buffer.isBuffer(body)
+    this.set('Content-Length', len = Buffer.isBuffer(body)
       ? body.length
-      : Buffer.byteLength(body, encoding);
-    this.set('Content-Length', len);
+      : Buffer.byteLength(body));
   }
 
   // ETag support
-  var etag = len !== undefined && app.get('etag fn');
-  if (etag && ('GET' === req.method || 'HEAD' === req.method)) {
+  // TODO: W/ support
+  if (app.settings.etag && len && 'GET' == req.method) {
     if (!this.get('ETag')) {
-      etag = etag(body, encoding);
-      etag && this.set('ETag', etag);
+      this.set('ETag', etag(body));
     }
   }
 
@@ -162,8 +151,7 @@ res.send = function(body){
   }
 
   // respond
-  this.end((head ? null : body), encoding);
-
+  this.end(head ? null : body);
   return this;
 };
 
@@ -177,6 +165,9 @@ res.send = function(body){
  *     res.json(500, 'oh noes!');
  *     res.json(404, 'I dont have that');
  *
+ * @param {Mixed} obj or status
+ * @param {Mixed} obj
+ * @return {ServerResponse}
  * @api public
  */
 
@@ -186,9 +177,6 @@ res.json = function(obj){
     // res.json(body, status) backwards compat
     if ('number' == typeof arguments[1]) {
       this.statusCode = arguments[1];
-      return 'number' === typeof obj
-        ? jsonNumDeprecated.call(this, obj)
-        : jsonDeprecated.call(this, obj);
     } else {
       this.statusCode = obj;
       obj = arguments[1];
@@ -202,16 +190,11 @@ res.json = function(obj){
   var body = JSON.stringify(obj, replacer, spaces);
 
   // content-type
+  this.charset = this.charset || 'utf-8';
   this.get('Content-Type') || this.set('Content-Type', 'application/json');
 
   return this.send(body);
 };
-
-var jsonDeprecated = deprecate(res.json,
-  'res.json(obj, status): Use res.json(status, obj) instead');
-
-var jsonNumDeprecated = deprecate(res.json,
-  'res.json(num, status): Use res.status(status).json(num) instead');
 
 /**
  * Send JSON response with JSONP callback support.
@@ -223,6 +206,9 @@ var jsonNumDeprecated = deprecate(res.json,
  *     res.jsonp(500, 'oh noes!');
  *     res.jsonp(404, 'I dont have that');
  *
+ * @param {Mixed} obj or status
+ * @param {Mixed} obj
+ * @return {ServerResponse}
  * @api public
  */
 
@@ -232,9 +218,6 @@ res.jsonp = function(obj){
     // res.json(body, status) backwards compat
     if ('number' == typeof arguments[1]) {
       this.statusCode = arguments[1];
-      return 'number' === typeof obj
-        ? jsonpNumDeprecated.call(this, obj)
-        : jsonpDeprecated.call(this, obj);
     } else {
       this.statusCode = obj;
       obj = arguments[1];
@@ -251,15 +234,12 @@ res.jsonp = function(obj){
   var callback = this.req.query[app.get('jsonp callback name')];
 
   // content-type
-  this.get('Content-Type') || this.set('Content-Type', 'application/json');
-
-  // fixup callback
-  if (Array.isArray(callback)) {
-    callback = callback[0];
-  }
+  this.charset = this.charset || 'utf-8';
+  this.set('Content-Type', 'application/json');
 
   // jsonp
-  if (callback && 'string' === typeof callback) {
+  if (callback) {
+    if (Array.isArray(callback)) callback = callback[0];
     this.set('Content-Type', 'text/javascript');
     var cb = callback.replace(/[^\[\]\w$.]/g, '');
     body = 'typeof ' + cb + ' === \'function\' && ' + cb + '(' + body + ');';
@@ -267,12 +247,6 @@ res.jsonp = function(obj){
 
   return this.send(body);
 };
-
-var jsonpDeprecated = deprecate(res.json,
-  'res.jsonp(obj, status): Use res.jsonp(status, obj) instead');
-
-var jsonpNumDeprecated = deprecate(res.json,
-  'res.jsonp(num, status): Use res.status(status).jsonp(num) instead');
 
 /**
  * Transfer the file at the given `path`.
@@ -287,9 +261,6 @@ var jsonpNumDeprecated = deprecate(res.json,
  *
  *   - `maxAge` defaulting to 0
  *   - `root`   root directory for relative filenames
- *   - `hidden` serve hidden files, defaulting to false
- *
- * Other options are passed along to `send`.
  *
  * Examples:
  *
@@ -311,16 +282,18 @@ var jsonpNumDeprecated = deprecate(res.json,
  *       });
  *     });
  *
+ * @param {String} path
+ * @param {Object|Function} options or fn
+ * @param {Function} fn
  * @api public
  */
 
 res.sendfile = function(path, options, fn){
-  options = options || {};
-  var self = this;
-  var req = self.req;
-  var next = this.req.next;
-  var done;
-
+  var self = this
+    , req = self.req
+    , next = this.req.next
+    , options = options || {}
+    , done;
 
   // support function as second arg
   if ('function' == typeof options) {
@@ -338,13 +311,13 @@ res.sendfile = function(path, options, fn){
 
     // clean up
     cleanup();
-    if (!self.headersSent) self.removeHeader('Content-Disposition');
+    if (!self.headerSent) self.removeHeader('Content-Disposition');
 
     // callback available
     if (fn) return fn(err);
 
     // list in limbo if there's no callback
-    if (self.headersSent) return;
+    if (self.headerSent) return;
 
     // delegate
     next(err);
@@ -362,11 +335,10 @@ res.sendfile = function(path, options, fn){
     req.socket.removeListener('error', error);
   }
 
-  // Back-compat
-  options.maxage = options.maxage || options.maxAge || 0;
-
   // transfer
-  var file = send(req, path, options);
+  var file = send(req, path);
+  if (options.root) file.root(options.root);
+  file.maxage(options.maxAge || 0);
   file.on('error', error);
   file.on('directory', next);
   file.on('stream', stream);
@@ -380,10 +352,13 @@ res.sendfile = function(path, options, fn){
  * Optionally providing an alternate attachment `filename`,
  * and optional callback `fn(err)`. The callback is invoked
  * when the data transfer is complete, or when an error has
- * ocurred. Be sure to check `res.headersSent` if you plan to respond.
+ * ocurred. Be sure to check `res.headerSent` if you plan to respond.
  *
  * This method uses `res.sendfile()`.
  *
+ * @param {String} path
+ * @param {String|Function} filename or fn
+ * @param {Function} fn
  * @api public
  */
 
@@ -395,7 +370,7 @@ res.download = function(path, filename, fn){
   }
 
   filename = filename || path;
-  this.set('Content-Disposition', contentDisposition(filename));
+  this.set('Content-Disposition', 'attachment; filename="' + basename(filename) + '"');
   return this.sendfile(path, fn);
 };
 
@@ -481,8 +456,8 @@ res.type = function(type){
  */
 
 res.format = function(obj){
-  var req = this.req;
-  var next = req.next;
+  var req = this.req
+    , next = req.next;
 
   var fn = obj.default;
   if (fn) delete obj.default;
@@ -493,7 +468,10 @@ res.format = function(obj){
   this.vary("Accept");
 
   if (key) {
-    this.set('Content-Type', normalizeType(key).value);
+    var type = normalizeType(key).value;
+    var charset = mime.charsets.lookup(type);
+    if (charset) type += '; charset=' + charset;
+    this.set('Content-Type', type);
     obj[key](req, this, next);
   } else if (fn) {
     fn();
@@ -517,7 +495,9 @@ res.format = function(obj){
 
 res.attachment = function(filename){
   if (filename) this.type(extname(filename));
-  this.set('Content-Disposition', contentDisposition(filename));
+  this.set('Content-Disposition', filename
+    ? 'attachment; filename="' + basename(filename) + '"'
+    : 'attachment');
   return this;
 };
 
@@ -544,10 +524,6 @@ res.header = function(field, val){
   if (2 == arguments.length) {
     if (Array.isArray(val)) val = val.map(String);
     else val = String(val);
-    if ('content-type' == field.toLowerCase() && !/;\s*charset\s*=/.test(val)) {
-      var charset = mime.charsets.lookup(val.split(';')[0]);
-      if (charset) val += '; charset=' + charset.toLowerCase();
-    }
     this.setHeader(field, val);
   } else {
     for (var key in field) {
@@ -581,7 +557,7 @@ res.get = function(field){
 res.clearCookie = function(name, options){
   var opts = { expires: new Date(1), path: '/' };
   return this.cookie(name, '', options
-    ? mixin(opts, options)
+    ? utils.merge(opts, options)
     : opts);
 };
 
@@ -609,10 +585,10 @@ res.clearCookie = function(name, options){
  */
 
 res.cookie = function(name, val, options){
-  options = mixin({}, options);
+  options = utils.merge({}, options);
   var secret = this.req.secret;
   var signed = options.signed;
-  if (signed && !secret) throw new Error('cookieParser("secret") required for signed cookies');
+  if (signed && !secret) throw new Error('connect.cookieParser("secret") required for signed cookies');
   if ('number' == typeof val) val = val.toString();
   if ('object' == typeof val) val = 'j:' + JSON.stringify(val);
   if (signed) val = 's:' + sign(val, secret);
@@ -621,18 +597,7 @@ res.cookie = function(name, val, options){
     options.maxAge /= 1000;
   }
   if (null == options.path) options.path = '/';
-  var headerVal = cookie.serialize(name, String(val), options);
-
-  // supports multiple 'res.cookie' calls by getting previous value
-  var prev = this.get('Set-Cookie');
-  if (prev) {
-    if (Array.isArray(prev)) {
-      headerVal = prev.concat(headerVal);
-    } else {
-      headerVal = [prev, headerVal];
-    }
-  }
-  this.set('Set-Cookie', headerVal);
+  this.set('Set-Cookie', cookie.serialize(name, String(val), options));
   return this;
 };
 
@@ -647,17 +612,46 @@ res.cookie = function(name, val, options){
  *
  *    res.location('/foo/bar').;
  *    res.location('http://example.com');
- *    res.location('../login');
+ *    res.location('../login'); // /blog/post/1 -> /blog/login
+ *
+ * Mounting:
+ *
+ *   When an application is mounted and `res.location()`
+ *   is given a path that does _not_ lead with "/" it becomes
+ *   relative to the mount-point. For example if the application
+ *   is mounted at "/blog", the following would become "/blog/login".
+ *
+ *      res.location('login');
+ *
+ *   While the leading slash would result in a location of "/login":
+ *
+ *      res.location('/login');
  *
  * @param {String} url
  * @api public
  */
 
 res.location = function(url){
-  var req = this.req;
+  var app = this.app
+    , req = this.req
+    , path;
 
   // "back" is an alias for the referrer
   if ('back' == url) url = req.get('Referrer') || '/';
+
+  // relative
+  if (!~url.indexOf('://') && 0 != url.indexOf('//')) {
+    // relative to path
+    if ('.' == url[0]) {
+      path = req.originalUrl.split('?')[0];
+      path = path + ('/' == path[path.length - 1] ? '' : '/');
+      url = resolve(path, url);
+      // relative to mount-point
+    } else if ('/' != url[0]) {
+      path = app.path();
+      url = path + '/' + url;
+    }
+  }
 
   // Respond
   this.set('Location', url);
@@ -686,9 +680,9 @@ res.location = function(url){
  */
 
 res.redirect = function(url){
-  var head = 'HEAD' == this.req.method;
-  var status = 302;
-  var body;
+  var head = 'HEAD' == this.req.method
+    , status = 302
+    , body;
 
   // allow status / url
   if (2 == arguments.length) {
@@ -711,7 +705,7 @@ res.redirect = function(url){
     },
 
     html: function(){
-      var u = escapeHtml(url);
+      var u = utils.escape(url);
       body = '<p>' + statusCodes[status] + '. Redirecting to <a href="' + u + '">' + u + '</a></p>';
     },
 
@@ -736,12 +730,31 @@ res.redirect = function(url){
  */
 
 res.vary = function(field){
-  // checks for back-compat
+  var self = this;
+
+  // nothing
   if (!field) return this;
-  if (Array.isArray(field) && !field.length) return this;
 
-  vary(this, field);
+  // array
+  if (Array.isArray(field)) {
+    field.forEach(function(field){
+      self.vary(field);
+    });
+    return;
+  }
 
+  var vary = this.get('Vary');
+
+  // append
+  if (vary) {
+    vary = vary.split(/ *, */);
+    if (!~vary.indexOf(field)) vary.push(field);
+    this.set('Vary', vary.join(', '));
+    return this;
+  }
+
+  // set
+  this.set('Vary', field);
   return this;
 };
 
@@ -755,14 +768,17 @@ res.vary = function(field){
  *  - `cache`     boolean hinting to the engine it should cache
  *  - `filename`  filename of the view being rendered
  *
+ * @param  {String} view
+ * @param  {Object|Function} options or callback function
+ * @param  {Function} fn
  * @api public
  */
 
 res.render = function(view, options, fn){
-  options = options || {};
-  var self = this;
-  var req = this.req;
-  var app = req.app;
+  var self = this
+    , options = options || {}
+    , req = this.req
+    , app = req.app;
 
   // support callback function as second arg
   if ('function' == typeof options) {

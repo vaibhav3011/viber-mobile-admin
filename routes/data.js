@@ -15,6 +15,15 @@ exports.level_1_100 = function (req, res, next) {
 
 
 };
+exports.citydata = function (req, res, next) {
+
+    client.get("citydata", function (err, reply) {
+        res.send(reply);
+    });
+
+
+
+};
 exports.city=function (req,res,next){
     var cit=req.params.city;
     client.get(cit, function (err, reply) {

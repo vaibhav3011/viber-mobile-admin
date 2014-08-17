@@ -7,22 +7,25 @@ app = express();
 app.use(express.static('www'));
 var manage = require("./routes/manageinterns.js");
 var studentutils = require('./routes/student-utils.js');
-var messenger=require('./routes/messenger')
+var messenger=require('./routes/messenger');
+var city= require('./routes/city')
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
 });
-
+var city=require('./routes/city');
+app.get('/data/city',data.citydata);
+app.get('/:city/:page',city.list);
 app.get('/students', students.findAll);
 app.get('/students/:id', students.findById);
 app.get('/students/:id/reports', students.findReports);
 app.get('/data',data.level_1_100);
-app.get('/data/:city',data.city)
+app.get('/data/:city/',data.city)
 app.get('/manage/getsubordinates/:email/:role', manage.getsubordinates);
 app.get('/messenger',messenger.people);
-
+app.get('/city',city.city);
 // app.get('/manage/child/1',manage.test_addrandomroles);
 // app.get('/manage/grandchild/1',manage.add_grandchild);
 // app.get('/manage/view/s',manage.getsubordinates);
