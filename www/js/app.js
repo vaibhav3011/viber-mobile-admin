@@ -34,6 +34,11 @@ angular.module('directory', ['ionic', 'directory.controllers', 'directory.servic
                 url: '/manage/:email/:role',
                 templateUrl: 'templates/student-reports.html',
                 controller: 'StudentReportsCtrl'
+            })
+            .state('messenger', {
+                url: '/messenger',
+                templateUrl: 'templates/student-messenger.html',
+                controller: 'StudentMessengerCtrl'
             });
 
         $urlRouterProvider.otherwise('/search');

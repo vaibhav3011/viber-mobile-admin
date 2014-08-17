@@ -1,0 +1,18 @@
+<ion-view title="Messenger">
+    <ion-content class="has-header has-subheader">
+        <ion-list>
+            <ion-item ng-repeat="student in student_messenger" type="item-text-wrap" class="item-avatar item-icon-right"
+                      href="#/students/{{student.email}}">
+                <img ng-src="http://graph.facebook.com/{{student.facebookid}}/picture?height=80&width=80"/>
+                {{student.name}}
+                <p>{{student.email}}
+                    <br/>{{student.location.name}}
+                    <br/>{{student.rolename}}
+                    <i class="item-note">Refercount: {{student.refercount}}</i>
+                </p>
+
+            </ion-item>
+        </ion-list>
+    </ion-content>
+
+</ion-view>
