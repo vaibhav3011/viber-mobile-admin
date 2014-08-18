@@ -7,7 +7,7 @@ var redis =require("redis");
 var client=redis.createClient(6379, '54.251.103.74');
 client.select(2, function() { /* ... */ });
 exports.level_1_100 = function (req, res, next) {
-
+console.log("data");
     client.get("1", function (err, reply) {
         res.send(reply);
     });
@@ -15,18 +15,13 @@ exports.level_1_100 = function (req, res, next) {
 
 
 };
-exports.citydata = function (req, res, next) {
 
-    client.get("citydata", function (err, reply) {
-        res.send(reply);
-    });
-
-
-
-};
 exports.city=function (req,res,next){
-    var cit=req.params.city;
-    client.get(cit, function (err, reply) {
+    var city=req.params.city;
+    client.get(city, function (err, reply) {
+        if(err)
+            res.send(err);
+        console.log("fetching city data");
         res.send(reply);
     });
 };

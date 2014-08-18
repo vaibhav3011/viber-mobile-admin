@@ -10,9 +10,9 @@ client.select(2, function() { /* ... */ });
 exports.list = function (req, res, next) {
     var city=req.param.city;
     var page=req.param.page;
-    var q=  Students.find({"location.name":city}).select('facebookid name email location.name rolename role').skip((page-1)*50).limit(50);
+    var q=  Students.find({"location.name":city}).select('facebookid name email location.name rolename role').sort({'updatedon':1}).skip(50*(page-1)).limit(50);
     q.exec(function(err,Students){
-
+        console.log("city list");
         if(!err)
         {
 
@@ -28,7 +28,7 @@ exports.list = function (req, res, next) {
     });
 };
 exports.city = function (req, res, next) {
-
+    console.log("city data");
     client.get("citydata", function (err, reply) {
         res.send(reply);
     });
