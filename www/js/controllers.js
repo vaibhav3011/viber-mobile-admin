@@ -1,12 +1,12 @@
 angular.module('directory.controllers', [])
 
-    .controller('StudentListCtrl', function ($scope, Students,$ionicLoading,appCache) {
+    .controller('StudentListCtrl', function ($scope, Students,$ionicLoading,studentCache) {
 
          $ionicLoading.show({
               template: 'Loading...'
             });
 
-        var appData = appCache;
+        var appData = studentCache;
         $scope.searchKey = "";
        
 
@@ -73,7 +73,28 @@ angular.module('directory.controllers', [])
             $ionicSideMenuDelegate.toggleLeft();
           };
         })
+    .controller('StudentMessengerCtrl', function ($scope, StudentMessenger,$ionicLoading,studentCache) {
 
+        $ionicLoading.show({
+            template: 'Loading...'
+        });
+
+        var appData = studentCache;
+        if(!appData.messengerData)
+        {
+            StudentMessenger.query().$promise.then(function(data) {
+
+                appData.messengerData = data;
+                $scope.student_messenger = data;
+                $ionicLoading.hide();
+            });
+        }
+        else
+        {
+            $scope.student_messenger = appData.messengerData;
+            $ionicLoading.hide();
+        }
+    })
     .controller('StudentReportsCtrl', function ($scope, $stateParams, Students, Manage,$ionicLoading) {
         console.log('reports');
          $ionicLoading.show({
