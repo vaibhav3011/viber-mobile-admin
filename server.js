@@ -16,15 +16,17 @@ app.all('*', function(req, res, next) {
     next();
 });
 app.get('/city',city.city);
-app.get('/data/:city',data.city);
-app.get('/:city/:page',city.list);
 app.get('/data',data.level_1_100);
-
 app.get('/students', students.findAll);
+app.get('/messenger',messenger.people);
+
+app.get('/data/:city',data.city);
+
 app.get('/students/:id', students.findById);
 app.get('/students/:id/reports', students.findReports);
 app.get('/manage/getsubordinates/:email/:role', manage.getsubordinates);
-app.get('/messenger',messenger.people);
+app.get('/city/:city/:page',city.list);
+
 
 // app.get('/manage/child/1',manage.test_addrandomroles);
 // app.get('/manage/grandchild/1',manage.add_grandchild);
