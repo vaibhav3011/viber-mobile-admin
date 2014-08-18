@@ -50,11 +50,10 @@ angular.module('directory.controllers', [])
 
     .controller('StudentDetailCtrl', function($scope, $stateParams, Students,$ionicLoading,$rootScope) {
         console.log('details');
-        
-        
-            $ionicLoading.show({
-              template: 'Loading...'
-            });
+        $ionicLoading.show({
+            template: 'Loading...'
+
+        });
         Students.get({studentId: $stateParams.StudentId}).$promise.then(function(data){
             
             $scope.student = data;
@@ -111,9 +110,29 @@ angular.module('directory.controllers', [])
             $scope.reportees = data;
             
         });
-        
-        
-        
-        
-        
+    })
+    .controller('CityReportsCtrl', function ($scope,$ionicLoading, GetCity) {
+        $ionicLoading.show({
+            template: 'Loading...'
+        });
+        GetCity.get().$promise.then(function(data){
+            console.log(data);
+            $scope.cities =data;
+            $ionicLoading.hide();
+
+        });
+//        $scope.cities = [{city:"New Delhi",count:16214},{city:"Mumbai",count:7506},{city:"Hyderabad",count:6573},{city:"Bangalore",count:4302},{city:"Chennai",count:2634},{city:"Pune",count:2474},{city:"Kolkata",count:2365},{city:"Jaipur",count:1850},{city:"Ahmedabad",count:1234},{city:"Noida",count:1169}];
+
+    })
+    .controller('CityDetailCtrl', function($scope, $stateParams,$ionicLoading, CityDetail) {
+        $ionicLoading.show({
+            template: 'Loading...'
+        });
+        CityDetail.get({city: $stateParams.CityName}).$promise.then(function (data) {
+
+            $scope.citydetail = data;
+            $ionicLoading.hide();
+
+
+        });
     });

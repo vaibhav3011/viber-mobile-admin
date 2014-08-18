@@ -39,6 +39,16 @@ angular.module('directory', ['ionic', 'directory.controllers', 'directory.servic
                 url: '/messenger',
                 templateUrl: 'templates/student-messenger.html',
                 controller: 'StudentMessengerCtrl'
+            })
+            .state('cityreport', {
+                url: '/cityreport',
+                templateUrl: 'templates/city-reports.html',
+                controller: 'CityReportsCtrl'
+            })
+            .state('citydetail', {
+                url: '/cities/:CityName',
+                templateUrl: 'templates/city-detail.html',
+                controller: 'CityDetailCtrl'
             });
 
         $urlRouterProvider.otherwise('/search');
