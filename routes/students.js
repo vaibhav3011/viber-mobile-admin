@@ -16,6 +16,7 @@ exports.findAll = function (req, res, next) {
         Students.findOne({'email': name},function(err,student) {
            // return (employee.firstName + ' ' + employee.lastName).toLowerCase().indexOf(name.toLowerCase()) > -1;
            console.log(student);
+            console.log("data")
            if(student){
                var resarry=[student];
                res.send(JSON.stringify(resarry));

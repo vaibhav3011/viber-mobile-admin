@@ -21,10 +21,11 @@
       "validator": "~3.16.0",
       "cluster": "~0.7.7",
       "bcrypt-nodejs" : "latest",
-
       "morgan": "~1.0.0",
       "body-parser": "~1.0.0",
-      "cookie-parser": "~1.0.0"
+      "cookie-parser": "~1.0.0",
+      "method-override": "~1.0.0"
+
 
   }
 

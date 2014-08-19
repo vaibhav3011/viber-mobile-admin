@@ -7,6 +7,8 @@ var Students = studentSchema.student;
 var redis =require("redis");
 var client=redis.createClient(6379, '54.251.103.74');
 client.select(2, function() { /* ... */ });
+
+
 exports.list = function (req, res, next) {
     var city=req.param.city;
     var page=req.param.page;
@@ -27,9 +29,13 @@ exports.list = function (req, res, next) {
 
     });
 };
+
+
 exports.city = function (req, res, next) {
-    console.log("city data");
+
     client.get("citydata", function (err, reply) {
+        console.log("city data");
+        console.log(reply);
         res.send(reply);
     });
 
