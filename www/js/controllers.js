@@ -115,11 +115,10 @@ angular.module('directory.controllers', [])
         $ionicLoading.show({
             template: 'Loading...'
         });
-        GetCity.get().$promise.then(function(data){
+        GetCity.query().$promise.then(function(data){
             console.log(data);
             $scope.cities =data;
             $ionicLoading.hide();
-
         });
 //        $scope.cities = [{city:"New Delhi",count:16214},{city:"Mumbai",count:7506},{city:"Hyderabad",count:6573},{city:"Bangalore",count:4302},{city:"Chennai",count:2634},{city:"Pune",count:2474},{city:"Kolkata",count:2365},{city:"Jaipur",count:1850},{city:"Ahmedabad",count:1234},{city:"Noida",count:1169}];
 
