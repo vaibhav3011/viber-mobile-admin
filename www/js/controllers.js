@@ -60,7 +60,16 @@ angular.module('directory.controllers', [])
             $rootScope.currentstudent = data;
             
             $ionicLoading.hide();
-        
+            //task ids
+            var user_task = $scope.student.user_tasks;
+            $scope.task2 = _.where(user_task,{'task_id':'53d1e85abb5c82917b3a3a42'})[0];
+            $scope.task3 = _.where(user_task,{'task_id':'53d1e8c9bb5c82917b3a3a43'})[0];
+            $scope.task5 = _.where(user_task,{'task_id':'53d1ec3bbb5c82917b3a3a45'})[0];
+
+            //ng-repeat answer in task2.answers  answer.name[0]
+            console.log($scope.task2.answers);
+            console.log($scope.task3.answers);
+            console.log($scope.task5.answers);
         
             
         });

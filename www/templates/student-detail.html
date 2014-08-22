@@ -16,8 +16,35 @@
             <a class="item item-icon-left" href="sms:{{student.cellPhone}}"><i class="icon ion-chatbox-working"></i>Vibes :<p>{{student.points}}</p></a>
             <a class="item item-icon-left" href="sms:{{student.cellPhone}}"><i class="icon ion-chatbox-working"></i>Refer Count :<p>{{student.refercount}}</p></a>
             <a class="item item-icon-left" ng-repeat="level in student.stages"><i class="icon ion-chatbox-working"></i>{{level.name}} :<p>{{level.completion}}</p></a>
-            
+
+            <div class="item item-avatar">
+                <h2>Level 2 Task 2</h2>
+                <p>Activate your most contacted friends on Viber</p>
+            </div>
+
+            <div  ng-repeat="answer in task2.answers" class="item item-image">
+                <img style="width: 200px;vertical-align: baseline" ng-src="https://s3-ap-southeast-1.amazonaws.com/viber-uploads/level2task2/{{answer.name[0]}}">
+            </div>
+
+            <div class="item item-avatar">
+                <h2>Level 2 Task 3</h2>
+                <p>#GoodVibes is on your mind</p>
+            </div>
+
+            <div  ng-repeat="answer in task3.answers" class="item item-image">
+                <img style="width: 200px;vertical-align: baseline" ng-src="https://s3-ap-southeast-1.amazonaws.com/viber-uploads/level2task3/{{answer.name[0]}}">
+            </div>
+
+            <div class="item item-avatar">
+                <h2>Level 2 Task 5</h2>
+                <p>Support Yuwa</p>
+            </div>
+
+            <div  ng-repeat="answer in task5.answers" class="item item-image">
+                <img style="width: 200px;vertical-align: baseline" ng-src="https://s3-ap-southeast-1.amazonaws.com/viber-uploads/level2task5/{{answer.name[0]}}">
+            </div>
         </div>
+
 
     </ion-content>
 

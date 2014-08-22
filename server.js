@@ -105,7 +105,6 @@ app.all('*', function(req, res, next) {
 });
 
 
-//authentication
 app.get('/login', function(req, res){
     res.render('login', { user: req.user, message: req.flash('error') });
 });
@@ -120,42 +119,42 @@ app.get('/login', function(req, res){
 app.post('/login',
     passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
     function(req, res) {
-        res.redirect('/');
+        res.redirect('/search');
     });
 
 // POST /login
 //   This is an alternative implementation that uses a custom callback to
 //   acheive the same functionality.
 /*
- app.post('/login', function(req, res, next) {
- passport.authenticate('local', function(err, user, info) {
- if (err) { return next(err) }
- if (!user) {
- req.flash('error', info.message);
- return res.redirect('/login')
- }
- req.logIn(user, function(err) {
- if (err) { return next(err); }
- return res.redirect('/users/' + user.username);
- });
- })(req, res, next);
- });
- */
+app.post('/login', function(req, res, next) {
+passport.authenticate('local', function(err, user, info) {
+if (err) { return next(err) }
+if (!user) {
+req.flash('error', info.message);
+return res.redirect('/login')
+}
+req.logIn(user, function(err) {
+if (err) { return next(err); }
+return res.redirect('/users/' + user.username);
+});
+})(req, res, next);
+});
+*/
 
 app.get('/logout', function(req, res){
     req.logout();
     res.redirect('/');
 });
 //routes
-app.get('/city',ensureAuthenticated,city.city);
-app.get('/data',ensureAuthenticated,data.level_1_100);
-app.get('/students',ensureAuthenticated, students.findAll);
-app.get('/messenger',ensureAuthenticated,messenger.people);
-app.get('/data/:city',ensureAuthenticated,data.city);
-app.get('/students/:id',ensureAuthenticated, students.findById);
-app.get('/students/:id/reports',ensureAuthenticated, students.findReports);
-app.get('/manage/getsubordinates/:email/:role',ensureAuthenticated, manage.getsubordinates);
-app.get('/city/:city/:page',ensureAuthenticated,city.list);
+app.get('/city',city.city);
+app.get('/data',data.level_1_100);
+app.get('/students', students.findAll);
+app.get('/messenger',messenger.people);
+app.get('/data/:city',data.city);
+app.get('/students/:id',students.findById);
+app.get('/students/:id/reports',students.findReports);
+app.get('/manage/getsubordinates/:email/:role', manage.getsubordinates);
+app.get('/city/:city/:page',city.list);
 
 
 // app.get('/manage/child/1',manage.test_addrandomroles);
