@@ -7,6 +7,7 @@ var messenger=require('./routes/messenger.js');
 var city= require('./routes/city.js');
 var morgan         = require('morgan');
 var bodyParser     = require('body-parser');
+var cookieParser= require('cookie-Parser');
 var methodOverride = require('method-override');
 var passport  = require('passport');
 var session = require('express-session');
@@ -20,11 +21,10 @@ app.use(morgan('dev')); 					// log every request to the console
 app.use(bodyParser()); 						// pull information from html in POST
 app.use(methodOverride());
 app.use(express.static('www'));
-app.use(express.logger());
-app.use(express.cookieParser());
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(express.session({ secret: 'keyboard cat' }));
+app.use(cookieParser());
+app.use(bodyParser());
+app.use(methodOverride());
+app.use(session({ secret: 'keyboard cat' }));
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(flash());
