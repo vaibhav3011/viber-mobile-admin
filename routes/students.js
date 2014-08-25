@@ -54,8 +54,8 @@ exports.findById = function (req, res, next) {
            
            if(!err && Students.length > 0)
            {
-                    
-                    res.send(JSON.stringify(Students[0]));
+
+                    res.send(JSON.stringify(Students));
                     
            }
            else 

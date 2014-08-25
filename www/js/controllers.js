@@ -19,7 +19,7 @@ angular.module('directory.controllers', [])
             $ionicLoading.show({
               template: 'Loading...'
             });
-            Students.query({name: $scope.searchKey}).$promise.then(function(data){
+            Students.query({studentId: $scope.searchKey}).$promise.then(function(data){
                 
                 $scope.students= data;
                 $ionicLoading.hide();
@@ -149,4 +149,16 @@ angular.module('directory.controllers', [])
 
 
         });
+    })
+    .controller('ZonalManagersCtrl', function($scope, $stateParams,$ionicLoading, ZonalManagerDetail) {
+        $ionicLoading.show({
+            template: 'Loading...'
+        });
+
+    })
+    .controller('ProjectManagersCtrl', function($scope, $stateParams,$ionicLoading, ProjectManagerDetail) {
+        $ionicLoading.show({
+            template: 'Loading...'
+        });
+
     });

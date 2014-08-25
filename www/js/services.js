@@ -19,6 +19,15 @@ angular.module('directory.services', ['ngResource'])
         return $resource('/data/:city');
 
     })
+//    .factory('LoginService',function($resource) {
+//
+//        return $resource('/login');
+//        return $resource('/login', { username: '@username',password: '@password' }, {
+//            charge: { method: 'POST' },
+//            find: { method: 'POST' } // Added `find` action
+//        });
+//
+//    })
     .factory('StudentMessenger',function($resource) {
 
         return $resource('/messenger');
