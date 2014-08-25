@@ -69,6 +69,9 @@ angular.module('directory.controllers', [])
             $scope.level3task2 = _.where(user_task,{'task_id':'53db77ab68425b29ecc82f51'})[0];
             $scope.level3task3 = _.where(user_task,{'task_id':'53db781e68425b29ecc82f6a'})[0];
             $scope.level3task4 = _.where(user_task,{'task_id':'53db787f68425b29ecc82f6b'})[0];
+            $scope.level4task1 = _.where(user_task,{'task_id':'53f73760e37edbac1f6dec17'})[0];
+            $scope.level4task2 = _.where(user_task,{'task_id':'53f73770e37edbac1f6dec18'})[0];
+            $scope.level4task5 = _.where(user_task,{'task_id':'53f73799e37edbac1f6dec1b'})[0];
             //ng-repeat answer in task2.answers  answer.name[0]
             console.log($scope.task2.answers);
             console.log($scope.task3.answers);
