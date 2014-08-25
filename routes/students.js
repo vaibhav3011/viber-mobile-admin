@@ -49,7 +49,7 @@ exports.findAll = function (req, res, next) {
 exports.findById = function (req, res, next) {
     var id = req.params.id;
     
-     var q=  Students.find({'email': id}).sort({'updatedon':-1}).limit(50);
+     var q=  Students.find({'mobile': id}).sort({'updatedon':-1}).limit(50);
       q.exec(function(err,Students){
            
            if(!err && Students.length > 0)
