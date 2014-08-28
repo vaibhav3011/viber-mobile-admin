@@ -1,6 +1,6 @@
 angular.module('directory.controllers', [])
 
-    .controller('StudentListCtrl', function ($scope, Students,$ionicLoading,studentCache, $window) {
+    .controller('StudentListCtrl', function ($scope, Students,$ionicLoading,studentCache, $window, $rootScope) {
 
          $ionicLoading.show({
               template: 'Loading...'
@@ -120,7 +120,7 @@ angular.module('directory.controllers', [])
             });
         };
     })
-    .controller('StudentMessengerCtrl', function ($scope, StudentMessenger,$ionicLoading,studentCache,$window) {
+    .controller('StudentMessengerCtrl', function ($scope, StudentMessenger,$ionicLoading,studentCache,$window, $rootScope) {
 
         $ionicLoading.show({
             template: 'Loading...'
@@ -149,7 +149,7 @@ angular.module('directory.controllers', [])
             $ionicLoading.hide();
         }
     })
-    .controller('StudentReportsCtrl', function ($scope, $stateParams, Students, Manage,$ionicLoading, $window) {
+    .controller('StudentReportsCtrl', function ($scope, $stateParams, Students, Manage,$ionicLoading, $window, $rootScope) {
         console.log('reports');
          $ionicLoading.show({
               template: 'Loading...'
@@ -172,7 +172,7 @@ angular.module('directory.controllers', [])
 
         });
     })
-    .controller('CityReportsCtrl', function ($scope,$ionicLoading, GetCity, $window) {
+    .controller('CityReportsCtrl', function ($scope,$ionicLoading, GetCity, $window, $rootScope) {
         $ionicLoading.show({
             template: 'Loading...'
         });
@@ -191,7 +191,7 @@ angular.module('directory.controllers', [])
 //        $scope.cities = [{city:"New Delhi",count:16214},{city:"Mumbai",count:7506},{city:"Hyderabad",count:6573},{city:"Bangalore",count:4302},{city:"Chennai",count:2634},{city:"Pune",count:2474},{city:"Kolkata",count:2365},{city:"Jaipur",count:1850},{city:"Ahmedabad",count:1234},{city:"Noida",count:1169}];
 
     })
-    .controller('CityDetailCtrl', function($scope, $stateParams,$ionicLoading, CityDetail, $window) {
+    .controller('CityDetailCtrl', function($scope, $stateParams,$ionicLoading, CityDetail, $window, $rootScope) {
         $ionicLoading.show({
             template: 'Loading...'
         });
@@ -209,7 +209,7 @@ angular.module('directory.controllers', [])
         });
     })
     //zonal Manager controller start
-    .controller('ZonalManagersCtrl', function($scope, $ionicLoading, ZonalManagerDetail,studentCache, $window) {
+    .controller('ZonalManagersCtrl', function($scope, $ionicLoading, ZonalManagerDetail,studentCache, $window, $rootScope) {
         $ionicLoading.show({
             template: 'Loading...'
         });
@@ -239,7 +239,7 @@ angular.module('directory.controllers', [])
 
 
     //project Manager controller start
-    .controller('ProjectManagersCtrl', function($scope,$ionicLoading, ProjectManagerDetail, studentCache, $window) {
+    .controller('ProjectManagersCtrl', function($scope,$ionicLoading, ProjectManagerDetail, studentCache, $window, $rootScope) {
         $ionicLoading.show({
             template: 'Loading...'
         });
