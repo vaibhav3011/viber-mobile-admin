@@ -1,4 +1,5 @@
-
+var crypto = require('crypto');
+var assert = require('assert');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://viber_app:akshat@ds053449.mongolab.com:53449/viber_prod');
 var studentSchema = require('../models/studentmodel.js');
@@ -18,6 +19,12 @@ exports.findAll = function (req, res, next) {
            console.log(student);
             console.log("data")
            if(student){
+               var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+               var key = 'blableblablu';
+               var cipher = crypto.createCipher(algorithm, key);
+
+               var encrypted = cipher.update(student.facebookid, 'utf8', 'hex') + cipher.final('hex');
+               student.en=encrypted;
                var resarry=[student];
                res.send(resarry);
            }
@@ -30,7 +37,11 @@ exports.findAll = function (req, res, next) {
            
            if(!err)
            {
-                    
+                    var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+                    var key = 'blableblablu';
+                    var cipher = crypto.createCipher(algorithm, key);
+                    var encrypted = cipher.update(student.facebookid, 'utf8', 'hex') + cipher.final('hex');
+                    student.en=encrypted;
                     res.send(JSON.stringify(Students));
                     
            }
@@ -54,7 +65,12 @@ exports.findById = function (req, res, next) {
            
            if(!err && Students.length > 0)
            {
+                    var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+                    var key = 'blableblablu';
+                    var cipher = crypto.createCipher(algorithm, key);
 
+                    var encrypted = cipher.update(student.facebookid, 'utf8', 'hex') + cipher.final('hex');
+                    student[0].en=encrypted;
                     res.send(JSON.stringify(Students[0]));
                     
            }
