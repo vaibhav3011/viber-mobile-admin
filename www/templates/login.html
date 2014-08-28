@@ -1,0 +1,21 @@
+<div class="bar bar-header bar-light">
+    <h1 class="title">Login</h1>
+</div>
+<div class="content has-header padding">
+<form name="loginForm" ng-submit="onLogin(loginForm.$valid)">
+<div class="list">
+    <label class="item item-input">
+        <span class="input-label">Username</span>
+        <input ng-model="username" type="text">
+    </label>
+    <label class="item item-input">
+        <span class="input-label">Password</span>
+        <input ng-model="password" type="password">
+    </label>
+</div>
+<div ng-if="wrongpassword">* Wrong Username/Password</div>
+    <div class="padding">
+    <button type="submit" class="button button-block button-positive" ng-disabled="loginForm.$invalid">Sign In</button>
+</div>
+</form>
+</div>

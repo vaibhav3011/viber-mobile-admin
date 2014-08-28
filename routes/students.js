@@ -19,7 +19,7 @@ exports.findAll = function (req, res, next) {
             console.log("data")
            if(student){
                var resarry=[student];
-               res.send(JSON.stringify(resarry));
+               res.send(resarry);
            }
            else res.send('No Data found');
         });
@@ -49,13 +49,13 @@ exports.findAll = function (req, res, next) {
 exports.findById = function (req, res, next) {
     var id = req.params.id;
     
-     var q=  Students.find({'mobile': id}).sort({'updatedon':-1}).limit(50);
+     var q=  Students.find({'email': id}).sort({'updatedon':-1}).limit(50);
       q.exec(function(err,Students){
            
            if(!err && Students.length > 0)
            {
 
-                    res.send(JSON.stringify(Students));
+                    res.send(JSON.stringify(Students[0]));
                     
            }
            else 
@@ -88,4 +88,42 @@ exports.findReports = function (req, res, next) {
         });
     
     
+};
+
+exports.zonalmanagers = function (req, res, next) {
+    var q=  Students.find({"role":3}).sort({'updatedon':-1});
+    q.exec(function(err,Students){
+
+        if(!err)
+        {
+
+            res.send(Students);
+
+        }
+        else
+        {
+            res.send(err);
+            console.log(err);
+        }
+
+    });
+};
+
+exports.projectmanagers = function (req, res, next) {
+    var q=  Students.find({"role":2}).sort({'updatedon':-1});
+    q.exec(function(err,Students){
+
+        if(!err)
+        {
+
+            res.send(Students);
+
+        }
+        else
+        {
+            res.send(err);
+            console.log(err);
+        }
+
+    });
 };

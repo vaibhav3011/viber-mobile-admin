@@ -1,0 +1,17 @@
+<ion-view title="Project Managers">
+    <ion-content class="has-header has-subheader">
+        <ion-list>
+            <ion-item ng-repeat="manager in project_manager" type="item-text-wrap" class="item-avatar"
+                      href="#/students/{{manager.email}}">
+                <img ng-src="http://graph.facebook.com/{{manager.facebookid}}/picture?height=80&width=80"/>
+                {{manager.name}}
+                <p>{{manager.email}}
+                    <br/>{{manager.location.name}}
+                    <br/>{{manager.rolename}}
+
+                </p>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+
+</ion-view>

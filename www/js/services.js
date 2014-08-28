@@ -1,7 +1,8 @@
 angular.module('directory.services', ['ngResource'])
 
     .factory('Students', function ($resource) {
-        return $resource('/students/:studentId');
+        return $resource('/students/:studentId',
+            {'query': { method: 'GET' }});
     })
     .factory('studentCache', function ($cacheFactory) {
         return $cacheFactory('appData');
@@ -19,15 +20,24 @@ angular.module('directory.services', ['ngResource'])
         return $resource('/data/:city');
 
     })
-//    .factory('LoginService',function($resource) {
-//
-//        return $resource('/login');
-//        return $resource('/login', { username: '@username',password: '@password' }, {
-//            charge: { method: 'POST' },
-//            find: { method: 'POST' } // Added `find` action
-//        });
-//
-//    })
+    .factory('ZonalManagerDetail',function($resource) {
+
+        return $resource('/zonalmanager');
+
+    })
+    .factory('ProjectManagerDetail',function($resource) {
+
+        return $resource('/projectmanager');
+
+    })
+    .factory('LoginService',function($resource) {
+
+        //return $resource('/login');
+        return $resource('/login', {}, {
+            save: { method: 'POST' }
+        });
+
+    })
     .factory('StudentMessenger',function($resource) {
 
         return $resource('/messenger');

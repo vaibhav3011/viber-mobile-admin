@@ -18,10 +18,15 @@ angular.module('directory', ['ionic', 'directory.controllers', 'directory.servic
 
         $stateProvider
 
+            .state('login', {
+                url: '/login',
+                templateUrl: 'templates/login.html',
+                controller: 'StudentLoginCtrl'
+            })
             .state('search', {
                 url: '/search',
-                templateUrl: 'templates/student-list.html',
-                controller: 'StudentListCtrl'
+                controller: 'StudentListCtrl',
+                templateUrl: 'templates/student-list.html'
             })
 
             .state('Student', {
@@ -49,8 +54,23 @@ angular.module('directory', ['ionic', 'directory.controllers', 'directory.servic
                 url: '/cities/:CityName',
                 templateUrl: 'templates/city-detail.html',
                 controller: 'CityDetailCtrl'
+            })
+            .state('zonalmanagers', {
+                url: '/zonalmanagers',
+                templateUrl: 'templates/zonalmanagers.html',
+                controller: 'ZonalManagersCtrl'
+            })
+            .state('projectmanagers', {
+                url: '/projectmanagers',
+                templateUrl: 'templates/projectmanagers.html',
+                controller: 'ProjectManagersCtrl'
+            })
+            .state('logout', {
+                url: '/logout',
+                templateUrl: 'templates/projectmanagers.html',
+                controller: 'ProjectManagersCtrl'
             });
 
-        $urlRouterProvider.otherwise('/search');
+        $urlRouterProvider.otherwise('/login');
 
     });

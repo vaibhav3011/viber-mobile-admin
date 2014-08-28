@@ -60,8 +60,10 @@
           <a href="#search" nav-clear class="item" ng-click="toggleLeft()">Home</a>
           <a href="#cityreport" nav-clear class="item" ng-click="toggleLeft()">City reports</a>
           <a href="#messenger" nav-clear class="item" ng-click="toggleLeft()">Messenger</a>
+          <a href="#zonalmanagers" nav-clear class="item" ng-click="toggleLeft()">Zonal Managers</a>
+          <a href="#projectmanagers" nav-clear class="item" ng-click="toggleLeft()">Project Managers</a>
           <a ui-sref="snd.drink" nav-clear class="item" ng-click="toggleLeft()">Reports</a>
-          <a ui-sref="snd.drink" nav-clear class="item" ng-click="toggleLeft()">Logout</a>
+          <a ng-if="isLoggedin" href="/logout" nav-clear class="item" ng-click="toggleLeft()">Logout</a>
         </ul>
       </ion-content>
       <ion-footer-bar class="bar bar-footer">
