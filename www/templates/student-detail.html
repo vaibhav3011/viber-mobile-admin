@@ -5,7 +5,7 @@
                 <img ng-src="http://graph.facebook.com/{{student.facebookid}}/picture?height=80&width=80"/>
                 <h2>{{student.name}}</h2>
                 <p ng-if="student.role > 0" >Role : {{student.rolename}}</p>
-                <a href="http://app.thegoodvibes.in/students/backend/login/{{student.encr}}" target="_blank"><p><strong>View Profile</strong></p></a>
+                <a href="http://beta.thegoodvibes.in/students/backend/login/{{student.encr}}" target="_blank"><p><strong>View Profile</strong></p></a>
             </div>
             <a class="item item-icon-left" href="#/students/{{student.manager.email}}" ng-if="student.manager.email"><i class="icon ion-ios7-person"></i>View Manager<p>{{student.manager.name}}</p></a>
             <a class="item item-icon-left" href="#/manage/{{student.email}}/{{student.role}}" ng-if="student.role > 0"><i class="icon ion-person-stalker"></i>View Direct Reports<p>{{student.directreports}}</p></a>
