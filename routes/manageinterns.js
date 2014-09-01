@@ -258,7 +258,8 @@ function delsubordinates(req,res){
 
 module.exports = {getsubordinates :getsubordinates,
     test_addrandomroles : test_addrandomroles,
-    add_grandchild :add_grandchildren}
+    add_grandchild :add_grandchildren,
+    delsubordinates: delsubordinates}
 
 /**
  * Created by akshat on 12/8/14.
