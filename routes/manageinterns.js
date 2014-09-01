@@ -240,6 +240,20 @@ console.log('reached pm performance');
             }
         });
 };
+function delsubordinates(req,res){
+    var email=req.params.email;
+    var q=Students.update({"email":email},{$unset:{"manager":""}});
+    q.exec(function(err,Students){
+            if (err)
+            {
+                res.send("failure");
+            }
+            else{
+                res.send("success");
+            }
+        }
+    );
+}
 
 
 module.exports = {getsubordinates :getsubordinates,

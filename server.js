@@ -157,6 +157,7 @@ app.get('/logout', function(req, res){
 
 
 //routes
+
 app.get('/city',ensureAuthenticated,city.city);
 app.get('/data',ensureAuthenticated,data.level_1_100);
 app.get('/students',ensureAuthenticated, students.findAll);
@@ -167,6 +168,7 @@ app.get('/data/:city',ensureAuthenticated,data.city);
 app.get('/students/:id',ensureAuthenticated,students.findById);
 app.get('/students/:id/reports',ensureAuthenticated,students.findReports);
 app.get('/manage/getsubordinates/:email/:role',ensureAuthenticated, manage.getsubordinates);
+app.get('/manage/delsubordinates/:email',ensureAuthenticated,)
 app.get('/city/:city/:page',ensureAuthenticated,city.list);
 
 
