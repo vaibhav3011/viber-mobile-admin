@@ -168,7 +168,7 @@ app.get('/data/:city',ensureAuthenticated,data.city);
 app.get('/students/:id',ensureAuthenticated,students.findById);
 app.get('/students/:id/reports',ensureAuthenticated,students.findReports);
 app.get('/manage/getsubordinates/:email/:role',ensureAuthenticated, manage.getsubordinates);
-app.get('/manage/delsubordinates/:email',ensureAuthenticated,manage.delsubordinates);
+app.delete('/manage/delsubordinates/:email',ensureAuthenticated,manage.delsubordinates);
 app.get('/city/:city/:page',ensureAuthenticated,city.list);
 
 

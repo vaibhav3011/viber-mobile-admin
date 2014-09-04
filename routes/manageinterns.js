@@ -246,10 +246,10 @@ function delsubordinates(req,res){
     q.exec(function(err,Students){
             if (err)
             {
-                res.send("failure");
+                res.send("0");
             }
             else{
-                res.send("success");
+                res.send("1");
             }
         }
     );

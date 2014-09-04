@@ -38,6 +38,10 @@ angular.module('directory.services', ['ngResource'])
         });
 
     })
+    .factory('RemoveUser', function ($resource) {
+        return $resource('/manage/delsubordinates/:emailId',
+            {'remove': { method: 'DELETE' }});
+    })
     .factory('StudentMessenger',function($resource) {
 
         return $resource('/messenger');

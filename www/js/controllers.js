@@ -1,6 +1,6 @@
 angular.module('directory.controllers', [])
 
-    .controller('StudentListCtrl', function ($scope, Students,$ionicLoading,studentCache, $window, $rootScope) {
+    .controller('StudentListCtrl', ['$scope', 'Students','$ionicLoading','studentCache', '$window', '$rootScope',function ($scope, Students,$ionicLoading,studentCache, $window, $rootScope) {
 
          $ionicLoading.show({
               template: 'Loading...'
@@ -8,12 +8,6 @@ angular.module('directory.controllers', [])
 
         var appData = studentCache;
         $scope.searchKey = "";
-       
-
-        $scope.clearSearch = function () {
-            $scope.searchKey = "";
-            $scope.students = Students.query();
-        }
 
         $scope.search = function () {
             $ionicLoading.show({
@@ -57,7 +51,7 @@ angular.module('directory.controllers', [])
         }
             
         
-    })
+    }])
 
     .controller('StudentDetailCtrl', function($scope, $stateParams, Students,$ionicLoading,$rootScope,$window) {
         console.log('details');
@@ -149,16 +143,12 @@ angular.module('directory.controllers', [])
             $ionicLoading.hide();
         }
     })
-    .controller('StudentReportsCtrl', function ($scope, $stateParams, Students, Manage,$ionicLoading, $window, $rootScope) {
+    .controller('StudentReportsCtrl', function ($scope, $stateParams, $ionicPopup, Students, Manage, RemoveUser, $ionicLoading, $window, $rootScope) {
         console.log('reports');
          $ionicLoading.show({
               template: 'Loading...'
             });
-            
-           
-            
-            
-            
+
         Manage.query({email: $stateParams.email, role: $stateParams.role}).$promise.then(function(data){
             if(_.values(data[0]).join("")=='notloggedin') {
                 $ionicLoading.hide();
@@ -171,6 +161,33 @@ angular.module('directory.controllers', [])
             }
 
         });
+
+        //Remove reportee
+
+        $scope.onRemove = function(index){
+            var confirmPopup = $ionicPopup.confirm({
+                title: 'Remove User',
+                template: 'Are you sure you want to remove this user?'
+            });
+            confirmPopup.then(function(res) {
+
+                //If yes
+                if(res) {
+                    RemoveUser.remove({emailId: $scope.reportees[index].email}).$promise.then(function(data){
+                        if(_.values(data[0])=="1") {
+                            $scope.reportees = _.without($scope.reportees, $scope.reportees[index]);
+                            $ionicLoading.show({ template: 'User Removed Successfully!', noBackdrop: true, duration: 2000 });
+                        }
+                        else{
+                            $ionicLoading.show({ template: 'Please try Again!', noBackdrop: true, duration: 2000 });
+                        }
+                    });
+                } else {
+                    //console.log('You are not sure');
+                }
+            });
+
+        }
     })
     .controller('CityReportsCtrl', function ($scope,$ionicLoading, GetCity, $window, $rootScope) {
         $ionicLoading.show({

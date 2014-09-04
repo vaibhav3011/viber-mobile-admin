@@ -8,7 +8,7 @@
                 <h2>{{currentstudent.name}}</h2>
                 <p>{{currentstudent.rolename}}</p>
             </div>
-            <a ng-repeat="reportee in reportees" class="item item-avatar item-icon-left" href="#/students/{{reportee.email}}">
+            <a ng-repeat="reportee in reportees" class="item item-avatar item-icon-left" on-swipe-left="onRemove($index)" href="#/students/{{reportee.email}}">
                 <img  ng-src="http://graph.facebook.com/{{reportee.facebookid}}/picture?height=80&width=80"/>
                 {{reportee.name}}
                 <p ng-if="reportee.reportees">No of Reportees :{{reportee.reportees}}</p>
